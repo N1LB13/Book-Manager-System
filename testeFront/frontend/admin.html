@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+        <button id="logout">Sair</button>
+        
+        <h2>Adicionar Livro</h2>
+        <form id="add-book-form">
+            <input type="text" id="title" placeholder="Título" required>
+            <input type="text" id="author" placeholder="Autor" required>
+            <input type="text" id="genre" placeholder="Gênero" required>
+            <input type="number" id="rating" placeholder="Avaliação" required>
+            <button type="submit">Adicionar</button>
+        </form>
+        
+        <h2>Remover Livro</h2>
+        <form id="delete-book-form">
+            <input type="number" id="book-id" placeholder="ID do Livro" required>
+            <button type="submit">Remover</button>
+        </form>
+    </div>
+    <script src="js/admin.js"></script>
+</body>
+</html>

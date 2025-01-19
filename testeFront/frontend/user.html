@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>User Dashboard</h1>
+        <button id="logout">Sair</button>
+        
+        <h2>Buscar Livro</h2>
+        <form id="search-book-form">
+            <input type="number" id="book-id" placeholder="ID do Livro" required>
+            <button type="submit">Buscar</button>
+        </form>
+        
+        <div id="book-details"></div>
+    </div>
+    <script src="js/user.js"></script>
+</body>
+</html>
