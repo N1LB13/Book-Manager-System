@@ -11,7 +11,7 @@ on:
 jobs:
   build:
     name: Build and Test API
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Corrigido para um ambiente válido
 
     steps:
       # 1. Checkout do código do repositório
@@ -27,16 +27,20 @@ jobs:
       # 3. Instalar dependências e compilar o código
       - name: Install dependencies
         run: |
+          cd backend  
           go mod tidy
           go mod download
 
       # 4. Executar os testes
       - name: Run tests
-        run: go test ./... -v
+        run: |
+          cd backend  
+          go test ./... -v
 
       # 5. Verificar formatação e lint do código (opcional)
       - name: Run lint and format checks
         run: |
+          cd backend  
           go fmt ./...
           go vet ./...
 
@@ -59,9 +63,12 @@ jobs:
       # 3. Instalar dependências
       - name: Install dependencies
         run: |
+          cd backend  
           go mod tidy
           go mod download
 
       # 4. Build da aplicação
       - name: Build API
-        run: go build -o app .
+        run: |
+          cd backend 
+          go build -o app .
