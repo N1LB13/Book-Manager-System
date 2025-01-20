@@ -35,7 +35,6 @@ type livro struct {
 // Lista de livros (simulação de banco de dados)
 var livros []livro
 
-// Função para carregar dados do CSV
 func carregarDadosCSV(caminho string) error {
 	file, err := os.Open(caminho)
 	if err != nil {
@@ -62,16 +61,18 @@ func carregarDadosCSV(caminho string) error {
 			nextID = id + 1
 		}
 
+		// Certifique-se de carregar corretamente o gênero principal
 		livros = append(livros, livro{
 			ID:        id,
 			Title:     record[1],
 			Author:    record[2],
-			MainGenre: record[3],
+			MainGenre: record[3], // Gênero na coluna 3
 			Rating:    rating,
 		})
 	}
 	return nil
 }
+
 
 // Função para salvar os livros no arquivo CSV
 func salvarDadosCSV(caminho string) error {
@@ -268,6 +269,51 @@ func removerLivro(c *gin.Context) {
 	c.JSON(http.StatusNotFound, gin.H{"error": "Livro não encontrado"})
 }
 
+func recomendarLivros(c *gin.Context) {
+	var input struct {
+		Generos []string `json:"generos"`
+	}
+
+	// Lê o JSON enviado pelo frontend
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
+		return
+	}
+
+	// Verifica se os gêneros foram fornecidos
+	if len(input.Generos) != 3 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Você deve selecionar exatamente 3 gêneros"})
+		return
+	}
+
+	// Gêneros escolhidos pelo usuário
+	escolhas := make(map[string]bool)
+	for _, genero := range input.Generos {
+		escolhas[genero] = true
+	}
+
+	// Filtra livros que correspondem aos gêneros escolhidos e têm alta avaliação
+	var recomendacoes []livro
+	for _, livro := range livros {
+		if escolhas[livro.MainGenre] && livro.Rating >= 4.0 {
+			recomendacoes = append(recomendacoes, livro)
+		}
+	}
+
+	// Limitar as recomendações a no máximo 5 livros
+	if len(recomendacoes) > 5 {
+		recomendacoes = recomendacoes[:5]
+	}
+
+	// Retorna os livros recomendados
+	if len(recomendacoes) == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Nenhum livro encontrado para os gêneros escolhidos"})
+		return
+	}
+	c.JSON(http.StatusOK, recomendacoes)
+}
+
+
 func main() {
 	// Carregar dados do CSV
 	if err := carregarDadosCSV("dados.csv"); err != nil {
@@ -294,6 +340,7 @@ func main() {
 	protected.Use(autenticarJWT())
 	{
 		protected.GET("/livros/:id", getLivroPorID)
+		protected.POST("/recommend", recomendarLivros)
 		protected.POST("/livros", autenticarAdmin(), adicionarLivro)
 		protected.DELETE("/livros/:id", autenticarAdmin(), removerLivro)
 	}
