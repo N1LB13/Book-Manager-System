@@ -3,10 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recomendações de Livros</title>
+    <title>Busca e Recomendações de Livros</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+    <h2>Busca de Livro</h2>
+    <form id="search-book-form">
+        <label for="book-id">ID do Livro:</label>
+        <input type="text" id="book-id" placeholder="Digite o ID do livro" required>
+        <button type="submit">Buscar Livro</button>
+    </form>
+    <pre id="book-details"></pre>
+
     <h2>Recomendações de Livros</h2>
     <form id="genre-form">
         <label for="genres">Escolha 3 gêneros:</label>
@@ -45,6 +53,8 @@
         <button type="submit">Obter Recomendações</button>
     </form>
     <div id="recommendations"></div>
+
+    <button id="logout">Sair</button>
 
     <!-- Adicione o script aqui -->
     <script src="js/user.js"></script>
