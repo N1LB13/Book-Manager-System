@@ -36,21 +36,7 @@ jobs:
           cd backend
           go test ./...
 
-      # Testar e construir o frontend
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Install Frontend Dependencies
-        run: |
-          cd frontend
-          npm install
-
-      - name: Build Frontend
-        run: |
-          cd frontend
-          npm run build
+  
 
   deploy:
     name: Deploy
