@@ -1,0 +1,65 @@
+name: Go API Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Etapa 1: Fazer checkout do código
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Etapa 2: Configurar o ambiente Go
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.20 # Substitua pela versão que você está utilizando
+
+      # Etapa 3: Instalar dependências do Go
+      - name: Install dependencies
+        run: go mod tidy
+
+      # Etapa 4: Executar os testes
+      - name: Run tests
+        run: go test ./... -v -cover
+
+      # Etapa 5: Construir o binário da aplicação
+      - name: Build the application
+        run: go build -o app ./backend/main.go
+
+      # Etapa 6: Validar arquivos do front-end
+      - name: Check front-end files
+        run: |
+          ls frontend/css
+          ls frontend/js
+          ls frontend/*.html
+
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      # Etapa 1: Fazer checkout do código
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Etapa 2: Configurar Go e instalar dependências
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.20
+
+      - name: Install dependencies
+        run: go mod tidy
+
+      # Etapa 3: Fazer deploy da aplicação (exemplo para Heroku ou outro ambiente)
+      - name: Deploy to server
+        run: |
+          echo "Deploy logic goes here (e.g., Docker, upload files to a server, etc.)"
